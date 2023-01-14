@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymulatorDaltonizmu1", "SymulatorDaltonizmu1\SymulatorDaltonizmu1.csproj", "{159670EA-D5D9-4E66-B384-0FD6BF05BE04}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ColorBlindcpp", "ColorBlindcpp\ColorBlindcpp.vcxproj", "{083E6FAC-0E8E-49D7-9B39-3C031198DF81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Debug|x64.Build.0 = Debug|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Debug|x86.Build.0 = Debug|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Release|x64.ActiveCfg = Release|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Release|x64.Build.0 = Release|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Release|x86.ActiveCfg = Release|Any CPU
+		{159670EA-D5D9-4E66-B384-0FD6BF05BE04}.Release|x86.Build.0 = Release|Any CPU
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Debug|Any CPU.Build.0 = Debug|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Debug|x64.ActiveCfg = Debug|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Debug|x64.Build.0 = Debug|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Debug|x86.ActiveCfg = Debug|Win32
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Debug|x86.Build.0 = Debug|Win32
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Release|Any CPU.ActiveCfg = Release|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Release|Any CPU.Build.0 = Release|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Release|x64.ActiveCfg = Release|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Release|x64.Build.0 = Release|x64
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Release|x86.ActiveCfg = Release|Win32
+		{083E6FAC-0E8E-49D7-9B39-3C031198DF81}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F0D0487-E86E-4E8D-A99A-6E82DE210963}
+	EndGlobalSection
+EndGlobal
