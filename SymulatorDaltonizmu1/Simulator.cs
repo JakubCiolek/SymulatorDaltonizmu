@@ -31,7 +31,25 @@ namespace SymulatorDaltonizmu1
             this.library = lib;
         }
 
+        private void simulate()
+        { 
 
+            //=============================  https://github.com/jkulesza/peacock/blob/master/cpp/src/CB_Converter.hpp
+            uint range;
+            // Run-time values
+            float cpu = 0.753f;
+            float cpv = 0.265f;
+            float am= 1.273463f;
+            float ayi= -0.073894f;
+
+            //compile-time constants.
+            const float cb_gamma = 2.2f;
+            const float wx = 0.312713f;
+            const float wy = 0.329016f;
+            const float wz = 0.358271f;
+            const float v = 1.75f;
+            const float d = v + 1.0f;
+        }
         public void start()
         {
             if (this.library)
