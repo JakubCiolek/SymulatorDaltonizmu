@@ -99,10 +99,10 @@
             this.cLibrary.Checked = true;
             this.cLibrary.Location = new System.Drawing.Point(28, 387);
             this.cLibrary.Name = "cLibrary";
-            this.cLibrary.Size = new System.Drawing.Size(49, 19);
+            this.cLibrary.Size = new System.Drawing.Size(40, 19);
             this.cLibrary.TabIndex = 5;
             this.cLibrary.TabStop = true;
-            this.cLibrary.Text = "C++";
+            this.cLibrary.Text = "C#";
             this.cLibrary.UseVisualStyleBackColor = true;
             this.cLibrary.CheckedChanged += new System.EventHandler(this.cLibrary_CheckedChanged);
             // 
