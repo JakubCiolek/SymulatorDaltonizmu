@@ -41,6 +41,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.defaultView = new System.Windows.Forms.PictureBox();
             this.colorBlindView = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.time = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBlindView)).BeginInit();
@@ -171,11 +173,31 @@
             this.colorBlindView.TabIndex = 12;
             this.colorBlindView.TabStop = false;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(25, 445);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(94, 15);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "Czas wykonania:";
+            // 
+            // time
+            // 
+            this.time.AutoSize = true;
+            this.time.Location = new System.Drawing.Point(125, 445);
+            this.time.Name = "time";
+            this.time.Size = new System.Drawing.Size(32, 15);
+            this.time.TabIndex = 14;
+            this.time.Text = "0 ms";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(936, 450);
+            this.ClientSize = new System.Drawing.Size(936, 478);
+            this.Controls.Add(this.time);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.colorBlindView);
             this.Controls.Add(this.defaultView);
             this.Controls.Add(this.label6);
@@ -214,5 +236,7 @@
         private Label label6;
         private PictureBox defaultView;
         private PictureBox colorBlindView;
+        private Label label7;
+        private Label time;
     }
 }

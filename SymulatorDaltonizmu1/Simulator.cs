@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace SymulatorDaltonizmu1
 {
@@ -64,10 +65,12 @@ namespace SymulatorDaltonizmu1
             this.library = lib;
         }
 
-        private void simulate()
+        public long simulate()
         {
             //=============================  https://github.com/jkulesza/peacock/blob/master/cpp/src/CB_Converter.hpp
             int x, y;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             for (x = 0; x < blindImage.Width; x++)
             {
                 for (y = 0; y < blindImage.Height; y++)
@@ -76,6 +79,8 @@ namespace SymulatorDaltonizmu1
                     convert_colorblind(pixelColor, x , y);
                 }
             }
+            stopwatch.Stop();
+            return stopwatch.ElapsedMilliseconds;
         }
 
         void convert_colorblind(Color pixelColor, int x, int y)
@@ -176,16 +181,17 @@ namespace SymulatorDaltonizmu1
         }
 
 
-        public void start()
+        public String start()
         {
             if (this.library)
             {
                 //run c#
-                simulate();
+                return simulate().ToString();
             }
             else
             {
                 //run asm
+                return "lol";
             }
         }
         

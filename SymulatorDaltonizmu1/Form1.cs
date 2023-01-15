@@ -15,7 +15,7 @@ namespace SymulatorDaltonizmu1
         {
             if (defaultView.Image != null)
             {
-                simulator.start();
+                time.Text=simulator.start() +" ms";
                 colorBlindView.Image = simulator.GetBlindImage();
             }
         }
