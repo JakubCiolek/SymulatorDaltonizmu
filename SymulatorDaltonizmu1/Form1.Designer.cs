@@ -96,6 +96,7 @@
             // cLibrary
             // 
             this.cLibrary.AutoSize = true;
+            this.cLibrary.Checked = true;
             this.cLibrary.Location = new System.Drawing.Point(28, 387);
             this.cLibrary.Name = "cLibrary";
             this.cLibrary.Size = new System.Drawing.Size(49, 19);
@@ -112,7 +113,6 @@
             this.asmLibrary.Name = "asmLibrary";
             this.asmLibrary.Size = new System.Drawing.Size(50, 19);
             this.asmLibrary.TabIndex = 6;
-            this.asmLibrary.TabStop = true;
             this.asmLibrary.Text = "ASM";
             this.asmLibrary.UseVisualStyleBackColor = true;
             this.asmLibrary.CheckedChanged += new System.EventHandler(this.asmLibrary_CheckedChanged);

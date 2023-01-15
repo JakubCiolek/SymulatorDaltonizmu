@@ -13,8 +13,11 @@ namespace SymulatorDaltonizmu1
       
         private void start_Click(object sender, EventArgs e)
         {
-            simulator.start();
-            colorBlindView.Image = simulator.GetBlindImage();
+            if (defaultView.Image != null)
+            {
+                simulator.start();
+                colorBlindView.Image = simulator.GetBlindImage();
+            }
         }
 
         private void load_Click(object sender, EventArgs e)

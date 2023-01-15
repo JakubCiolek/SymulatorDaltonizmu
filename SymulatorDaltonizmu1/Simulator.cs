@@ -151,8 +151,6 @@ namespace SymulatorDaltonizmu1
 
             Color newColor = Color.FromArgb(inversePow(sr), inversePow(sg), inversePow(sb));
             blindImage.SetPixel(x, y, newColor);
-       
-
             return;
         }
         List<float> create_Gamma_Lookup()
