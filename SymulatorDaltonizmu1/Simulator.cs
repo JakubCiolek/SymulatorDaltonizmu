@@ -191,7 +191,7 @@ namespace SymulatorDaltonizmu1
             else
             {
                 //run asm
-                return "lol";
+                return "dupa";
             }
         }
         
