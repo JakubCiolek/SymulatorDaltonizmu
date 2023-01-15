@@ -4,7 +4,7 @@ namespace SymulatorDaltonizmu1
 {
     public partial class Form1 : Form
     {
-        private Simulator simulator = new Simulator();
+        private Simulator simulator;
         public Form1()
         {
             InitializeComponent();
@@ -14,6 +14,7 @@ namespace SymulatorDaltonizmu1
         private void start_Click(object sender, EventArgs e)
         {
             simulator.start();
+            colorBlindView.Image = simulator.GetBlindImage();
         }
 
         private void load_Click(object sender, EventArgs e)
@@ -24,7 +25,7 @@ namespace SymulatorDaltonizmu1
             if (opf.ShowDialog() == DialogResult.OK)
             {
                 Bitmap image = new Bitmap(opf.FileName);
-                simulator.setImage(image);
+                simulator = new Simulator(image);
                 defaultView.Image = simulator.GetImage();
             }
         }
