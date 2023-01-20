@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Drawing;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SymulatorDaltonizmu1
 {
@@ -15,6 +16,7 @@ namespace SymulatorDaltonizmu1
         private Bitmap image;
         private Bitmap blindImage;
         private bool library = true;
+        int threadsNo = 1;
 
         private int range;
         // Run-time values Deuteranopia conversion coefficients 
@@ -64,25 +66,58 @@ namespace SymulatorDaltonizmu1
         {
             this.library = lib;
         }
+        public void setThreads(int n)
+        {
+            this.threadsNo = n;
+        }
 
         public long simulate()
         {
             //=============================  https://github.com/jkulesza/peacock/blob/master/cpp/src/CB_Converter.hpp
+            List<Thread> threads = new List<Thread>();
             int x, y;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (x = 0; x < blindImage.Width; x++)
+            if (threadsNo>1) // THREADS TO DO
             {
-                for (y = 0; y < blindImage.Height; y++)
+                for (x = 0; x < blindImage.Width; x++)
                 {
-                    Color pixelColor = blindImage.GetPixel(x, y);
-                    convert_colorblind(pixelColor, x , y);
+                    for (y = 0; y < blindImage.Height; y+= threadsNo)
+                    {
+                        for (int i = 0; i < threadsNo; i++)
+                        {
+                        //    if(y+i < blindImage.Height)
+                        //    {
+                        //        Color pixelColor = blindImage.GetPixel(x+i, y+i);
+                        //        //threads.Add(new Thread(() => convert_colorblind(pixelColor, x + i, y + i)));
+                        //        //threads[i].Start();
+                        //    }
+                        //    else
+                        //    {
+
+                        //    }
+                        }
+                        for (int i = 0; i < threadsNo; i++)
+                        {
+                            //threads[i].Join();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (x = 0; x < blindImage.Width; x++)
+                {
+                    for (y = 0; y < blindImage.Height; y++)
+                    {
+                        Color pixelColor = blindImage.GetPixel(x, y);
+                        convert_colorblind(pixelColor, x , y);
+                    }
                 }
             }
             stopwatch.Stop();
             return stopwatch.ElapsedMilliseconds;
         }
-
         void convert_colorblind(Color pixelColor, int x, int y)
         {
             float cr = powGammaLookup[pixelColor.R];
@@ -125,18 +160,22 @@ namespace SymulatorDaltonizmu1
             float sy = cy;
             float sz = (1.0f - (du + dv)) * cy / dv;
 
+            float dx = nx - sx;
+            float dz = nz - sz;
             // Convert xyz to rgb.
+
+            //========================= ASM ========================
             float sr = (3.063218f * sx - 1.393325f * sy - 0.475802f * sz);
             float sg = (-0.969243f * sx + 1.875966f * sy + 0.041555f * sz);
             float sb = (0.067871f * sx - 0.228834f * sy + 1.069251f * sz);
 
-            float dx = nx - sx;
-            float dz = nz - sz;
 
             // Convert xyz to rgb.
             float dr = (3.063218f * dx - 1.393325f * dy - 0.475802f * dz);
             float dg = (-0.969243f * dx + 1.875966f * dy + 0.041555f * dz);
             float db = (0.067871f * dx - 0.228834f * dy + 1.069251f * dz);
+
+            //========================= ASM END ========================
 
             float adjr = dr > 0 ? ((sr < 0 ? 0 : 1) - sr) / dr : 0;
             float adjg = dg > 0 ? ((sg < 0 ? 0 : 1) - sg) / dg : 0;

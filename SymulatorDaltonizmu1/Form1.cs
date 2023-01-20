@@ -42,5 +42,20 @@ namespace SymulatorDaltonizmu1
         {
             simulator.setLibrary(false); // Load asm lib - false
         }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(trackBar1, trackBar1.Value.ToString());
+            if(simulator!= null)
+            {
+                simulator.setThreads(trackBar1.Value);
+            }
+            
+        }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.start = new System.Windows.Forms.Button();
             this.load = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@
             this.colorBlindView = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
             this.time = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBlindView)).BeginInit();
@@ -131,9 +133,13 @@
             // trackBar1
             // 
             this.trackBar1.Location = new System.Drawing.Point(208, 387);
+            this.trackBar1.Maximum = 64;
+            this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(395, 45);
             this.trackBar1.TabIndex = 8;
+            this.trackBar1.Value = 1;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // label5
             // 
@@ -238,5 +244,6 @@
         private PictureBox colorBlindView;
         private Label label7;
         private Label time;
+        private ToolTip toolTip1;
     }
 }
