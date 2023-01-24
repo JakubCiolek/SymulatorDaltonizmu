@@ -13,6 +13,7 @@ namespace SymulatorDaltonizmu1
 {
     internal class Simulator
     {
+        private readonly object padlock = new object();
         private Bitmap image;
         private Bitmap blindImage;
         private bool library = true;
@@ -76,6 +77,7 @@ namespace SymulatorDaltonizmu1
             //=============================  https://github.com/jkulesza/peacock/blob/master/cpp/src/CB_Converter.hpp
             List<Thread> threads = new List<Thread>();
             int x, y;
+            int counter = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             if (threadsNo>1) // THREADS TO DO
@@ -84,24 +86,26 @@ namespace SymulatorDaltonizmu1
                 {
                     for (y = 0; y < blindImage.Height; y+= threadsNo)
                     {
-                        for (int i = 0; i < threadsNo; i++)
+                        Color pixelColor = blindImage.GetPixel(x, y);
+                        threads.Add(new Thread(() => convert_colorblind(pixelColor, x, y)));
+                        threads[counter].Start();
+                        counter++;
+                        if(counter==threadsNo)
                         {
-                        //    if(y+i < blindImage.Height)
-                        //    {
-                        //        Color pixelColor = blindImage.GetPixel(x+i, y+i);
-                        //        //threads.Add(new Thread(() => convert_colorblind(pixelColor, x + i, y + i)));
-                        //        //threads[i].Start();
-                        //    }
-                        //    else
-                        //    {
-
-                        //    }
-                        }
-                        for (int i = 0; i < threadsNo; i++)
-                        {
-                            //threads[i].Join();
+                            for(int i =0; i<threads.Count;i++)
+                            {
+                                threads[i].Join();
+                            }
+                            threads.Clear();
+                            counter = 0;
                         }
                     }
+                    for (int i = 0; i < threads.Count; i++)
+                    {
+                        threads[i].Join();
+                    }
+                    threads.Clear();
+                    counter = 0;
                 }
             }
             else
@@ -194,7 +198,10 @@ namespace SymulatorDaltonizmu1
             sb = sb + (adjust * db);
 
             Color newColor = Color.FromArgb(inversePow(sr), inversePow(sg), inversePow(sb));
-            blindImage.SetPixel(x, y, newColor);
+            lock(padlock)
+            {
+                blindImage.SetPixel(x, y, newColor);
+            }
             return;
         }
         List<float> create_Gamma_Lookup()
