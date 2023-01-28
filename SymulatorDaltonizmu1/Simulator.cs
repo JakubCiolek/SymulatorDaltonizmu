@@ -8,6 +8,9 @@ using System.Numerics;
 using System.Drawing;
 using System.Diagnostics;
 using System.Threading;
+using System.Diagnostics.Metrics;
+using System.Windows.Forms;
+using System.Data;
 
 namespace SymulatorDaltonizmu1
 {
@@ -35,7 +38,11 @@ namespace SymulatorDaltonizmu1
         private const float d = v + 1.0f;
 
         private List<float> powGammaLookup;
+        private Color[,] pixelArray;
+        List<Thread> threads = new List<Thread>();
 
+        //private object __lockObj;
+        //private bool __lockWasTaken = false;
         public Simulator(Bitmap image)
         {
             this.image = image;
@@ -43,6 +50,8 @@ namespace SymulatorDaltonizmu1
             //this.range = Bitmap.GetPixelFormatSize(image.PixelFormat);
             this.range = 255;
             powGammaLookup = create_Gamma_Lookup();
+            pixelArray = new Color[blindImage.Width, blindImage.Height];
+            //__lockObj = this.blindImage;
         }
 
         //[DllImport("C:\\Users\\Kubotronic\\source\\repos\\SymulatorDaltonizmu\\x64\\Debug\\SymulatorCpp.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -74,45 +83,43 @@ namespace SymulatorDaltonizmu1
 
         public long simulate()
         {
-            //=============================  https://github.com/jkulesza/peacock/blob/master/cpp/src/CB_Converter.hpp
-            List<Thread> threads = new List<Thread>();
             int x, y;
+            int imageX = pixelArray.GetLength(0);
+            int imageY = pixelArray.GetLength(1);
+            MakePixelArray();
             int counter = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             if (threadsNo>1) // THREADS TO DO
             {
-                for (x = 0; x < blindImage.Width; x++)
+                for (x = 0; x < imageX; x++)
                 {
-                    for (y = 0; y < blindImage.Height; y+= threadsNo)
+                    //Color pixelColor = blindImage.GetPixel(x, y);
+                    threads.Add(new Thread(() => Threads(x)));
+                    threads[counter].Start();
+                    counter++;
+                    if (counter == threadsNo)
                     {
-                        Color pixelColor = blindImage.GetPixel(x, y);
-                        threads.Add(new Thread(() => convert_colorblind(pixelColor, x, y)));
-                        threads[counter].Start();
-                        counter++;
-                        if(counter==threadsNo)
+                        for (int i = 0; i < threads.Count; i++)
                         {
-                            for(int i =0; i<threads.Count;i++)
-                            {
-                                threads[i].Join();
-                            }
-                            threads.Clear();
-                            counter = 0;
+                            threads[i].Join();
                         }
+                        threads.Clear();
+                        counter = 0;
                     }
-                    for (int i = 0; i < threads.Count; i++)
-                    {
-                        threads[i].Join();
-                    }
-                    threads.Clear();
-                    counter = 0;
                 }
+                for (int i = 0; i < threads.Count; i++)
+                {
+                    threads[i].Join();
+                }
+                threads.Clear();
+                counter = 0;
             }
             else
             {
-                for (x = 0; x < blindImage.Width; x++)
+                for ( x = 0; x < blindImage.Width; x++)
                 {
-                    for (y = 0; y < blindImage.Height; y++)
+                    for ( y = 0; y < blindImage.Height; y++)
                     {
                         Color pixelColor = blindImage.GetPixel(x, y);
                         convert_colorblind(pixelColor, x , y);
@@ -120,7 +127,39 @@ namespace SymulatorDaltonizmu1
                 }
             }
             stopwatch.Stop();
+            //pixelArayyToImage();
             return stopwatch.ElapsedMilliseconds;
+        }
+        void Threads(int x)
+        {
+            if(x<pixelArray.GetLength(0))
+            {
+                for (int y = 0; y < pixelArray.GetLength(1); y++)
+                {
+                    convert_colorblind(pixelArray[x, y], x, y);
+                }
+            }
+        }
+        void MakePixelArray()
+        {
+            for (int x = 0; x < pixelArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < pixelArray.GetLength(1); y++)
+                {
+                    pixelArray[x, y] = blindImage.GetPixel(x, y);
+                }
+            }
+        }
+        void pixelArayyToImage()
+        {
+
+            for (int x = 0; x < pixelArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < pixelArray.GetLength(1); y += threadsNo)
+                {
+                    blindImage.SetPixel(x, y, pixelArray[x, y]);
+                }
+            }
         }
         void convert_colorblind(Color pixelColor, int x, int y)
         {
@@ -198,10 +237,19 @@ namespace SymulatorDaltonizmu1
             sb = sb + (adjust * db);
 
             Color newColor = Color.FromArgb(inversePow(sr), inversePow(sg), inversePow(sb));
-            lock(padlock)
-            {
-                blindImage.SetPixel(x, y, newColor);
-            }
+
+           object __lockObj = blindImage;
+           bool __lockWasTaken = false;
+           try
+           {
+               System.Threading.Monitor.Enter(__lockObj, ref __lockWasTaken);
+               blindImage.SetPixel(x, y, newColor);
+           }
+           finally
+           {
+               if (__lockWasTaken) System.Threading.Monitor.Exit(__lockObj);
+           }
+            //pixelArray[x, y] = newColor;
             return;
         }
         List<float> create_Gamma_Lookup()
