@@ -56,7 +56,8 @@ namespace SymulatorDaltonizmu1
         }
 
         [DllImport("E:\\StudiaWszystkiePliki\\studia\\JA\\projekt\\Symulator\\x64\\Debug\\SimAsm.dll")]
-        static extern float SimulatorAsm(float x, float y, float z);
+        static extern void SimulatorAsm(float[] xyz);
+
         //static extern int MyProc1(int a, int b);
         public Bitmap GetImage()
         {
@@ -195,13 +196,13 @@ namespace SymulatorDaltonizmu1
         }
         void Threads(int col)
         {
-            if (col < pixelArray.GetLength(0))
-            {
+           // if (col < pixelArray.GetLength(0))
+           // {
                 for (int y = 0; y < pixelArray.GetLength(1); y++)
                 {
                     convert_colorblind(pixelArray[col, y], col, y);
                 }
-            }
+           // }
         }
         void MakePixelArray()
         {
@@ -215,7 +216,6 @@ namespace SymulatorDaltonizmu1
         }
         void pixelArayyToImage()
         {
-
             for (int x = 0; x < pixelArray.GetLength(0); x++)
             {
                 for (int y = 0; y < pixelArray.GetLength(1); y += threadsNo)
@@ -292,8 +292,16 @@ namespace SymulatorDaltonizmu1
             }
             else
             {
-                float[] asm = { sx, sy, sz, dx, dy, dz };
-                float dupa = SimulatorAsm(sx, sy, sz);
+                float[] asm = { sx, sy, sz, 0.0f };
+                SimulatorAsm(asm);
+                sr = asm[0];
+                sg = asm[1];
+                sb = asm[2];
+                float[] asm1 = {dx,dy,dz, 0.0f };
+                SimulatorAsm(asm1);
+                dr = asm1[0];
+                dg = asm1[1];
+                db = asm1[2];
                 //int retval = MyProc1(5,7);
             }
 
@@ -322,6 +330,11 @@ namespace SymulatorDaltonizmu1
             {
                 blindImage.SetPixel(x, y, newColor);
             }
+            //lock (pixelArray)
+            //{
+            //    pixelArray[x, y] = newColor;
+            //}
+            
             return;
         }
         List<float> create_Gamma_Lookup()

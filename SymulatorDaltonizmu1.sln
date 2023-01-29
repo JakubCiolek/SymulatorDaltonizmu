@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymulatorDaltonizmu1", "SymulatorDaltonizmu1\SymulatorDaltonizmu1.csproj", "{159670EA-D5D9-4E66-B384-0FD6BF05BE04}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD2E08E0-9D3B-42DE-B13A-E505462D307F} = {CD2E08E0-9D3B-42DE-B13A-E505462D307F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimAsm", "SimAsm\SimAsm.vcxproj", "{CD2E08E0-9D3B-42DE-B13A-E505462D307F}"
 EndProject
