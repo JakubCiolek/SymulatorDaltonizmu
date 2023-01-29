@@ -196,13 +196,13 @@ namespace SymulatorDaltonizmu1
         }
         void Threads(int col)
         {
-           // if (col < pixelArray.GetLength(0))
-           // {
+            if (col < pixelArray.GetLength(0))
+            {
                 for (int y = 0; y < pixelArray.GetLength(1); y++)
                 {
                     convert_colorblind(pixelArray[col, y], col, y);
                 }
-           // }
+            }
         }
         void MakePixelArray()
         {
