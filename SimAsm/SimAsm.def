@@ -1,2 +1,2 @@
 LIBRARY SimAsm
-EXPORTS Simulator
+EXPORTS SimulatorAsm

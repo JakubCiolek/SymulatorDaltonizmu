@@ -10,12 +10,12 @@ namespace SymulatorDaltonizmu1
             InitializeComponent();
         }
 
-      
+
         private void start_Click(object sender, EventArgs e)
         {
             if (defaultView.Image != null)
             {
-                time.Text=simulator.start() +" ms";
+                time.Text = simulator.start() + " ms";
                 colorBlindView.Image = simulator.GetBlindImage();
             }
         }
@@ -35,12 +35,20 @@ namespace SymulatorDaltonizmu1
 
         private void cLibrary_CheckedChanged(object sender, EventArgs e)
         {
-            simulator.setLibrary(true); // Load c++ lib - true
+            if (simulator != null)
+            {
+                simulator.setLibrary(true); // Load c++ lib - true
+
+            }
         }
 
         private void asmLibrary_CheckedChanged(object sender, EventArgs e)
         {
-            simulator.setLibrary(false); // Load asm lib - false
+            if (simulator != null)
+            {
+                simulator.setLibrary(false); // Load asm lib - false
+
+            }
         }
 
         private void toolTip1_Popup(object sender, PopupEventArgs e)
@@ -51,11 +59,26 @@ namespace SymulatorDaltonizmu1
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             toolTip1.SetToolTip(trackBar1, trackBar1.Value.ToString());
-            if(simulator!= null)
+            if (simulator != null)
             {
                 simulator.setThreads(trackBar1.Value);
             }
-            
+
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+            if (colorBlindView.Image != null)
+            {
+                SaveFileDialog sf = new SaveFileDialog();
+                sf.Filter = "Image Files(*.BMP;*.JPG;*.PNG)|*.BMP;*.JPG;*.PNG|All files (*.*)|*.*";
+
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap image = simulator.GetBlindImage();
+                    image.Save(sf.FileName);
+                }
+            }
         }
     }
 }

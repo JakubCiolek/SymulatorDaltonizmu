@@ -45,6 +45,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.time = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.save = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBlindView)).BeginInit();
@@ -54,7 +55,7 @@
             // 
             this.start.Location = new System.Drawing.Point(794, 369);
             this.start.Name = "start";
-            this.start.Size = new System.Drawing.Size(130, 69);
+            this.start.Size = new System.Drawing.Size(130, 80);
             this.start.TabIndex = 0;
             this.start.Text = "Start";
             this.start.UseVisualStyleBackColor = true;
@@ -64,7 +65,7 @@
             // 
             this.load.Location = new System.Drawing.Point(658, 369);
             this.load.Name = "load";
-            this.load.Size = new System.Drawing.Size(130, 69);
+            this.load.Size = new System.Drawing.Size(130, 37);
             this.load.TabIndex = 1;
             this.load.Text = "Wczytaj obraz";
             this.load.UseVisualStyleBackColor = true;
@@ -197,11 +198,22 @@
             this.time.TabIndex = 14;
             this.time.Text = "0 ms";
             // 
+            // save
+            // 
+            this.save.Location = new System.Drawing.Point(658, 412);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(130, 37);
+            this.save.TabIndex = 15;
+            this.save.Text = "Zapisz";
+            this.save.UseVisualStyleBackColor = true;
+            this.save.Click += new System.EventHandler(this.save_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(936, 478);
+            this.Controls.Add(this.save);
             this.Controls.Add(this.time);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.colorBlindView);
@@ -245,5 +257,6 @@
         private Label label7;
         private Label time;
         private ToolTip toolTip1;
+        private Button save;
     }
 }

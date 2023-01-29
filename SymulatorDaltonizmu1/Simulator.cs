@@ -11,12 +11,12 @@ using System.Threading;
 using System.Diagnostics.Metrics;
 using System.Windows.Forms;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace SymulatorDaltonizmu1
 {
     internal class Simulator
     {
-        private readonly object padlock = new object();
         private Bitmap image;
         private Bitmap blindImage;
         private bool library = true;
@@ -37,6 +37,7 @@ namespace SymulatorDaltonizmu1
         private const float v = 1.75f;
         private const float d = v + 1.0f;
 
+
         private List<float> powGammaLookup;
         private Color[,] pixelArray;
         List<Thread> threads = new List<Thread>();
@@ -54,8 +55,9 @@ namespace SymulatorDaltonizmu1
             //__lockObj = this.blindImage;
         }
 
-        //[DllImport("C:\\Users\\Kubotronic\\source\\repos\\SymulatorDaltonizmu\\x64\\Debug\\SymulatorCpp.dll", CallingConvention = CallingConvention.Cdecl)]
-        //public static extern int test();
+        [DllImport("E:\\StudiaWszystkiePliki\\studia\\JA\\projekt\\Symulator\\x64\\Debug\\SimAsm.dll")]
+        static extern float SimulatorAsm(float x, float y, float z);
+        //static extern int MyProc1(int a, int b);
         public Bitmap GetImage()
         {
             return image;
@@ -83,22 +85,83 @@ namespace SymulatorDaltonizmu1
 
         public long simulate()
         {
-            int x, y;
             int imageX = pixelArray.GetLength(0);
             int imageY = pixelArray.GetLength(1);
             MakePixelArray();
             int counter = 0;
+
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            if (threadsNo>1) // THREADS TO DO
+            if (threadsNo > 1) // THREADS TO DO
             {
-                for (x = 0; x < imageX; x++)
+                //Parallel.For(0, imageX, new ParallelOptions { MaxDegreeOfParallelism = threadsNo }, x => { Threads(x); });
+                //int rest = imageX % threadsNo;
+                //int loop = (imageX - rest) / threadsNo;
+                //int Xpos = 0;
+                //for (int x = 0; x < loop; x++)
+                //{
+                //    for(int t=0;t<threadsNo;t++)
+                //    {
+                //        threads.Add(new Thread(() => Threads(Xpos)));
+                //        threads[t].Start();
+                //        Xpos++;
+                //    }
+                //    foreach (Thread t in threads)
+                //    {
+                //        t.Join();
+                //    }
+                //    threads.Clear();
+                //}
+                //for(int i = imageX - rest; i< imageX;i++)
+                //{
+                //    threads.Add(new Thread(() => Threads(Xpos)));
+                //    threads[counter].Start();
+                //    counter++;
+                //    Xpos++;
+                //}
+                //foreach (Thread t in threads)
+                //{
+                //    t.Join();
+                //}
+                //threads.Clear();
+                //for (int x = 0; x < imageX; x++)
+                //{
+                //    for(int y = 0; y<imageY; y++)
+                //    {
+                //        threads.Add(new Thread(() => convert_colorblind(pixelArray[x,y],x,y)));
+                //        counter++;
+                //        if (threads.Count == threadsNo)
+                //        {
+                //            foreach(Thread t in threads)
+                //            {
+                //                t.Start();
+                //            }
+                //            foreach (Thread t in threads)
+                //            {
+                //                t.Join();
+                //            }
+                //            threads.Clear();
+                //            counter = 0;
+                //        }
+                //    }
+                //    foreach (Thread t in threads)
+                //    {
+                //        t.Start();
+                //    }
+                //    foreach (Thread t in threads)
+                //    {
+                //        t.Join();
+                //    }
+                //    threads.Clear();
+                //    counter = 0;
+                //}
+                for (int x = 0; x < imageX; x++)
                 {
                     //Color pixelColor = blindImage.GetPixel(x, y);
                     threads.Add(new Thread(() => Threads(x)));
                     threads[counter].Start();
                     counter++;
-                    if (counter == threadsNo)
+                    if (threads.Count == threadsNo)
                     {
                         for (int i = 0; i < threads.Count; i++)
                         {
@@ -117,12 +180,12 @@ namespace SymulatorDaltonizmu1
             }
             else
             {
-                for ( x = 0; x < blindImage.Width; x++)
+                for (int x = 0; x < blindImage.Width; x++)
                 {
-                    for ( y = 0; y < blindImage.Height; y++)
+                    for (int y = 0; y < blindImage.Height; y++)
                     {
                         Color pixelColor = blindImage.GetPixel(x, y);
-                        convert_colorblind(pixelColor, x , y);
+                        convert_colorblind(pixelColor, x, y);
                     }
                 }
             }
@@ -130,13 +193,13 @@ namespace SymulatorDaltonizmu1
             //pixelArayyToImage();
             return stopwatch.ElapsedMilliseconds;
         }
-        void Threads(int x)
+        void Threads(int col)
         {
-            if(x<pixelArray.GetLength(0))
+            if (col < pixelArray.GetLength(0))
             {
                 for (int y = 0; y < pixelArray.GetLength(1); y++)
                 {
-                    convert_colorblind(pixelArray[x, y], x, y);
+                    convert_colorblind(pixelArray[col, y], col, y);
                 }
             }
         }
@@ -163,6 +226,7 @@ namespace SymulatorDaltonizmu1
         }
         void convert_colorblind(Color pixelColor, int x, int y)
         {
+
             float cr = powGammaLookup[pixelColor.R];
             float cg = powGammaLookup[pixelColor.G];
             float cb = powGammaLookup[pixelColor.B];
@@ -208,15 +272,31 @@ namespace SymulatorDaltonizmu1
             // Convert xyz to rgb.
 
             //========================= ASM ========================
-            float sr = (3.063218f * sx - 1.393325f * sy - 0.475802f * sz);
-            float sg = (-0.969243f * sx + 1.875966f * sy + 0.041555f * sz);
-            float sb = (0.067871f * sx - 0.228834f * sy + 1.069251f * sz);
+            float sr = 0;
+            float sg = 0;
+            float sb = 0;
+            float dr = 0;
+            float dg = 0;
+            float db = 0;
+            if (library)
+            {
+                sr = (3.063218f * sx - 1.393325f * sy - 0.475802f * sz);
+                sg = (-0.969243f * sx + 1.875966f * sy + 0.041555f * sz);
+                sb = (0.067871f * sx - 0.228834f * sy + 1.069251f * sz);
 
 
-            // Convert xyz to rgb.
-            float dr = (3.063218f * dx - 1.393325f * dy - 0.475802f * dz);
-            float dg = (-0.969243f * dx + 1.875966f * dy + 0.041555f * dz);
-            float db = (0.067871f * dx - 0.228834f * dy + 1.069251f * dz);
+                // Convert xyz to rgb.
+                dr = (3.063218f * dx - 1.393325f * dy - 0.475802f * dz);
+                dg = (-0.969243f * dx + 1.875966f * dy + 0.041555f * dz);
+                db = (0.067871f * dx - 0.228834f * dy + 1.069251f * dz);
+            }
+            else
+            {
+                float[] asm = { sx, sy, sz, dx, dy, dz };
+                float dupa = SimulatorAsm(sx, sy, sz);
+                //int retval = MyProc1(5,7);
+            }
+
 
             //========================= ASM END ========================
 
@@ -238,40 +318,32 @@ namespace SymulatorDaltonizmu1
 
             Color newColor = Color.FromArgb(inversePow(sr), inversePow(sg), inversePow(sb));
 
-           object __lockObj = blindImage;
-           bool __lockWasTaken = false;
-           try
-           {
-               System.Threading.Monitor.Enter(__lockObj, ref __lockWasTaken);
-               blindImage.SetPixel(x, y, newColor);
-           }
-           finally
-           {
-               if (__lockWasTaken) System.Threading.Monitor.Exit(__lockObj);
-           }
-            //pixelArray[x, y] = newColor;
+            lock (blindImage)
+            {
+                blindImage.SetPixel(x, y, newColor);
+            }
             return;
         }
         List<float> create_Gamma_Lookup()
         {
-                List<float> powGammaLookupTemp = new List<float>();
-                double doubleRange = (double)range;
-                for (int i = 0; i <= range + 1; ++i)
-                {
-                    powGammaLookupTemp.Add(0.0f);
-                }
-                for (int i = 0; i <= range; ++i)
-                {
-                    double idouble = (double)i;
-                    powGammaLookupTemp[i] = (float)(Math.Pow(idouble / doubleRange, 2.2));
-                }
-                return powGammaLookupTemp;
+            List<float> powGammaLookupTemp = new List<float>();
+            double doubleRange = (double)range;
+            for (int i = 0; i <= range + 1; ++i)
+            {
+                powGammaLookupTemp.Add(0.0f);
+            }
+            for (int i = 0; i <= range; ++i)
+            {
+                double idouble = (double)i;
+                powGammaLookupTemp[i] = (float)(Math.Pow(idouble / doubleRange, 2.2));
+            }
+            return powGammaLookupTemp;
         }
 
         int inversePow(double x)
         {
-                double drange = (double)range;
-                return (int)Math.Round(drange * (x <= 0.0 ? 0.0 : (x >= 1.0 ? 1.0 : Math.Pow(x, 1.0 / 2.2))));
+            double drange = (double)range;
+            return (int)Math.Round(drange * (x <= 0.0 ? 0.0 : (x >= 1.0 ? 1.0 : Math.Pow(x, 1.0 / 2.2))));
         }
 
 
@@ -285,9 +357,9 @@ namespace SymulatorDaltonizmu1
             else
             {
                 //run asm
-                return "dupa";
+                return simulate().ToString();
             }
         }
-        
+
     }
 }
