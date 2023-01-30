@@ -56,7 +56,7 @@ namespace SymulatorDaltonizmu1
         }
 
         [DllImport("E:\\StudiaWszystkiePliki\\studia\\JA\\projekt\\Symulator\\x64\\Debug\\SimAsm.dll")]
-        static extern void SimulatorAsm(float[] xyz);
+        static extern void SimulatorAsm(float[] xyz, float[] xyz1);
 
         //static extern int MyProc1(int a, int b);
         public Bitmap GetImage()
@@ -293,15 +293,17 @@ namespace SymulatorDaltonizmu1
             else
             {
                 float[] asm = { sx, sy, sz, 0.0f };
-                SimulatorAsm(asm);
+                //SimulatorAsm(asm);
+               
+                float[] asm1 = {dx,dy,dz, 0.0f };
+                SimulatorAsm(asm,asm1);
                 sr = asm[0];
                 sg = asm[1];
                 sb = asm[2];
-                float[] asm1 = {dx,dy,dz, 0.0f };
-                SimulatorAsm(asm1);
                 dr = asm1[0];
                 dg = asm1[1];
                 db = asm1[2];
+
                 //int retval = MyProc1(5,7);
             }
 
