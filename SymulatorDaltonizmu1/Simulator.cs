@@ -43,23 +43,18 @@ namespace SymulatorDaltonizmu1
         private Color[,] pixelArray;
         List<Thread> threads = new List<Thread>();
 
-        //private object __lockObj;
-        //private bool __lockWasTaken = false;
         public Simulator(Bitmap image)
         {
             this.image = image;
             this.blindImage = image;
-            //this.range = Bitmap.GetPixelFormatSize(image.PixelFormat);
             this.range = 255;
             powGammaLookup = create_Gamma_Lookup();
             pixelArray = new Color[blindImage.Width, blindImage.Height];
-            //__lockObj = this.blindImage;
         }
 
         [DllImport("E:\\StudiaWszystkiePliki\\studia\\JA\\projekt\\Symulator\\x64\\Debug\\SimAsm.dll")]
         static extern void SimulatorAsm(float[] xyz, float[] xyz1);
 
-        //static extern int MyProc1(int a, int b);
         public Bitmap GetImage()
         {
             return image;
@@ -91,7 +86,7 @@ namespace SymulatorDaltonizmu1
             int imageY = pixelArray.GetLength(1);
             MakePixelArray();
             Stopwatch stopwatch = new Stopwatch();
-            if (threadsNo > 1) // THREADS TO DO
+            if (threadsNo > 1)
             {
                 int dividedPart = imageY / threadsNo;
                 for (int i=0;i<(threadsNo); i++)
@@ -116,6 +111,7 @@ namespace SymulatorDaltonizmu1
             }
             else
             {
+                stopwatch.Start();
                 for (int x = 0; x < blindImage.Width; x++)
                 {
                     for (int y = 0; y < blindImage.Height; y++)
@@ -134,7 +130,10 @@ namespace SymulatorDaltonizmu1
             {
                 for (int y = 0; y < pixelArray.GetLength(1); y++)
                 {
-                    convert_colorblind(pixelArray[x, y], x, y);
+                    if(x < pixelArray.GetLength(0))
+                    {
+                        convert_colorblind(pixelArray[x, y], x  , y);
+                    }
                 }
             }
             
